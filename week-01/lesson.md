@@ -11,3 +11,25 @@
    - Check status code
    - Check `userId` or `title`
    - Check response time < 200ms
+
+MY CODE:
+
+// TODO: Add your own tests here for the challenge!
+pm.test("Status code is 200", function () {
+    pm.response.to.have.status(200);
+});
+
+pm.test("Content-Type is application/json", function () {
+    pm.response.to.have.header("Content-Type");
+    pm.expect(pm.response.headers.get("Content-Type")).to.include("application/json");
+});
+
+const jsonData = pm.response.json();
+
+pm.test("Response time is less than 200ms", function () {
+    pm.expect(pm.response.responseTime).to.be.below(200);
+});
+
+pm.test("Post contains a title", function () {
+    pm.expect(jsonData.title).to.be.a("string").and.to.not.be.empty;
+});
