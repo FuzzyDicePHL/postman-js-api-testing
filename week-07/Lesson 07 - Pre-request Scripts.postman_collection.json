@@ -1,0 +1,63 @@
+{
+  "info": {
+    "name": "Lesson 07 - Pre-request Scripts",
+    "_postman_id": "lesson-07-id",
+    "description": "Demonstrates use of Pre-request Scripts in Postman",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "POST /posts with dynamic header",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "const timestamp = new Date().toISOString();",
+              "pm.environment.set(\"requestTime\", timestamp);",
+              "pm.request.headers.add({key: \"X-Request-Time\", value: timestamp});"
+            ],
+            "type": "text/javascript"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"X-Request-Time header is present\", function () {",
+              "    const headers = pm.request.headers.toObject();",
+              "    pm.expect(headers[\"X-Request-Time\"]).to.be.a(\"string\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Dynamic Request\",\n  \"timestamp\": \"{{requestTime}}\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://jsonplaceholder.typicode.com/posts",
+          "protocol": "https",
+          "host": [
+            "jsonplaceholder",
+            "typicode",
+            "com"
+          ],
+          "path": [
+            "posts"
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "info": {
+    "name": "Lesson 06 - Chaining Requests",
+    "_postman_id": "lesson-06-id",
+    "description": "Demonstrates extracting and chaining data between requests.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET User Info",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "https://jsonplaceholder.typicode.com/users/1",
+          "protocol": "https",
+          "host": [
+            "jsonplaceholder",
+            "typicode",
+            "com"
+          ],
+          "path": [
+            "users",
+            "1"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const jsonData = pm.response.json();",
+              "pm.environment.set(\"currentUsername\", jsonData.username);",
+              "pm.test(\"Username is saved\", function () {",
+              "    pm.expect(jsonData.username).to.be.a(\"string\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "GET Posts by User",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "https://jsonplaceholder.typicode.com/posts?userId=1",
+          "protocol": "https",
+          "host": [
+            "jsonplaceholder",
+            "typicode",
+            "com"
+          ],
+          "path": [
+            "posts"
+          ],
+          "query": [
+            {
+              "key": "userId",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const posts = pm.response.json();",
+              "pm.test(\"Posts returned\", function () {",
+              "    pm.expect(posts.length).to.be.above(0);",
+              "});",
+              "posts.forEach(post => {",
+              "    pm.test(\"Each post has title and body\", function () {",
+              "        pm.expect(post).to.have.property(\"title\");",
+              "        pm.expect(post).to.have.property(\"body\");",
+              "    });",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    }
+  ]
+}

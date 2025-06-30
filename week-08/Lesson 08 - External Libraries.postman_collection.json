@@ -1,0 +1,55 @@
+{
+  "info": {
+    "name": "Lesson 08 - External Libraries",
+    "_postman_id": "lesson-08-id",
+    "description": "Demonstrates usage of Lodash, Moment.js, and CryptoJS in Postman scripts",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET /users - Use External Libraries",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "https://jsonplaceholder.typicode.com/users",
+          "protocol": "https",
+          "host": [
+            "jsonplaceholder",
+            "typicode",
+            "com"
+          ],
+          "path": [
+            "users"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const users = pm.response.json();",
+              "",
+              "// Lodash example: longest name",
+              "const longestNameUser = _.maxBy(users, u => u.name.length);",
+              "console.log(\"User with longest name:\", longestNameUser.name);",
+              "",
+              "// Count .biz email domains",
+              "const bizUsers = _.filter(users, u => u.email.endsWith('.biz'));",
+              "console.log(\".biz domain users:\", bizUsers.length);",
+              "",
+              "// Moment.js example: current time",
+              "const now = moment();",
+              "console.log(\"Current time:\", now.format('YYYY-MM-DD HH:mm:ss'));",
+              "",
+              "// CryptoJS example: SHA256 hash",
+              "const hash = CryptoJS.SHA256(\"PostmanRocks\").toString();",
+              "console.log(\"SHA256 hash of 'PostmanRocks':\", hash);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    }
+  ]
+}

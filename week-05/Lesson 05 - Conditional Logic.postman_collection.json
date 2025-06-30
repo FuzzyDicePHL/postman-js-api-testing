@@ -1,0 +1,61 @@
+{
+  "info": {
+    "name": "Lesson 05 - Conditional Logic",
+    "_postman_id": "lesson-05-id",
+    "description": "Testing conditional logic in Postman scripts",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET /comments for postId=1",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://jsonplaceholder.typicode.com/comments?postId=1",
+          "protocol": "https",
+          "host": [
+            "jsonplaceholder",
+            "typicode",
+            "com"
+          ],
+          "path": [
+            "comments"
+          ],
+          "query": [
+            {
+              "key": "postId",
+              "value": "1"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const res = pm.response.json();",
+              "pm.test(\"Response is an array\", () => {",
+              "    pm.expect(res).to.be.an(\"array\");",
+              "});",
+              "",
+              "res.forEach(comment => {",
+              "    pm.test(\"Comment has non-empty email\", () => {",
+              "        pm.expect(comment.email).to.include(\"@\");",
+              "    });",
+              "",
+              "    if (comment.name) {",
+              "        pm.test(\"Name is at least 3 characters\", () => {",
+              "            pm.expect(comment.name.length).to.be.above(2);",
+              "        });",
+              "    }",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    }
+  ]
+}
